@@ -50,7 +50,7 @@ public class MainActivity extends ActionBarActivity {
         mActionButton = (Button) findViewById(R.id.actionButton);
         mInputView = (EditText) findViewById(R.id.inputView);
 
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mDataModel);
+        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mDataModel);
         mListView.setAdapter(mAdapter);
 
         mActionButton.setOnClickListener(new View.OnClickListener() {
