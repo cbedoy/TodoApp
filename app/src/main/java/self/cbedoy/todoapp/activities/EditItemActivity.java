@@ -1,4 +1,4 @@
-package self.cbedoy.todoapp;
+package self.cbedoy.todoapp.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import self.cbedoy.todoapp.R;
 
 
 public class EditItemActivity extends ActionBarActivity {
