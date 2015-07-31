@@ -19,46 +19,30 @@ import self.cbedoy.todoapp.artifacts.ApplicationLoader;
  * <p/>
  * Pademobile
  */
-public class CacheService<T>
-{
-    private static CacheService instance;
-    private final String        mFolderStorage;
+public class CacheService<T> {
+    private final String mFolderStorage;
 
-    public static CacheService getInstance(){
-        if(instance == null)
-            instance = new CacheService();
-        return instance;
-    }
-
-    public CacheService()
-    {
-        File external_files_dir = ApplicationLoader.mMainContext.getExternalFilesDir(null);
+    public CacheService() {
+        File externalFilesDir = ApplicationLoader.mMainContext.getExternalFilesDir(null);
         String applicationName = "TodoApp";
-        if(external_files_dir != null && this.isExternalStorageWritable())
-        {
-            this.mFolderStorage = external_files_dir.getAbsolutePath() + File.separator + applicationName + File.separator + "cache" + File.separator;
+        if (externalFilesDir != null && this.isExternalStorageWritable()) {
+            mFolderStorage = externalFilesDir.getAbsolutePath() + File.separator + applicationName + File.separator + "cache" + File.separator;
+        } else {
+            mFolderStorage = ApplicationLoader.mMainContext.getFilesDir().getAbsolutePath() + File.separator + applicationName + File.separator + "cache" + File.separator;
         }
-        else
-        {
-            this.mFolderStorage = ApplicationLoader.mMainContext.getFilesDir().getAbsolutePath() + File.separator + applicationName + File.separator + "cache" + File.separator;
-        }
-        new File(this.mFolderStorage).mkdirs();
+        boolean mkdirs = new File(mFolderStorage).mkdirs();
     }
 
 
-    public boolean writeCacheForSHA(String sha, List<T> serviceList)
-    {
-        try
-        {
-            String path = this.mFolderStorage + sha;
+    public boolean writeCacheForSHA(String sha, List<T> serviceList) {
+        try {
+            String path = mFolderStorage + sha;
             File file = new File(path);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(serviceList);
             objectOutputStream.close();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -66,22 +50,18 @@ public class CacheService<T>
     }
 
 
-
-    public List<T> readCacheFromSHA(String sha)
-    {
+    @SuppressWarnings("unchecked")
+    public List<T> readCacheFromSHA(String sha) {
         ArrayList<T> data = new ArrayList<T>();
-        try
-        {
-            String path = this.mFolderStorage + sha;
+        try {
+            String path = mFolderStorage + sha;
             File file = new File(path);
-            FileInputStream fileInputStream  = new FileInputStream(file);
+            FileInputStream fileInputStream = new FileInputStream(file);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
             data = (ArrayList<T>) objectInputStream.readObject();
             objectInputStream.close();
-        }
-        catch (Exception ignored)
-        {
+        } catch (Exception ignored) {
 
         }
         return data;

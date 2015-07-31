@@ -4,11 +4,16 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.transition.Explode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import self.cbedoy.todoapp.R;
 
@@ -17,7 +22,9 @@ public class EditItemActivity extends ActionBarActivity {
 
     public static int REQUEST_CODE = 23213;
 
-    private EditText mInputView;
+    private EditText mTitleEditView;
+    private EditText mDescriptionEditView;
+    private TextView mDateEditView;
     private Button mActionConfirm;
 
     @Override
@@ -27,24 +34,37 @@ public class EditItemActivity extends ActionBarActivity {
 
         Bundle extras = getIntent().getExtras();
 
-        final String value = extras.getString("value");
+
+        String title = extras.getString("title");
+        String description = extras.getString("description");
+        int date = extras.getInt("date");
         final int position = extras.getInt("position");
 
-        mInputView = (EditText) findViewById(R.id.inputEdit);
-        mActionConfirm = (Button) findViewById(R.id.confirmAction);
 
-        mInputView.setText(value);
+        mTitleEditView = (EditText) findViewById(R.id.titleEditView);
+        mDescriptionEditView = (EditText) findViewById(R.id.descriptionEditView);
+        mDateEditView = (TextView) findViewById(R.id.dateEditView);
+        mActionConfirm = (Button) findViewById(R.id.confirmEditView);
+
+        SimpleDateFormat df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+        String dateFormated = df.format(new Date(date));
+
+        mTitleEditView.setText(title);
+        mDescriptionEditView.setText(description);
+        mDateEditView.setText(dateFormated);
 
         mActionConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String newValue = mInputView.getText().toString();
+                String titleData = mTitleEditView.getText().toString();
+                String descriptionData = mDescriptionEditView.getText().toString();
 
                 Intent intent = getIntent();
 
-                intent.putExtra("index", position);
-                intent.putExtra("value", newValue);
+                intent.putExtra("position", position);
+                intent.putExtra("value", titleData);
+                intent.putExtra("description", descriptionData);
 
                 setResult(RESULT_OK, intent);
 
@@ -52,29 +72,13 @@ public class EditItemActivity extends ActionBarActivity {
 
             }
         });
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_edit_item, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            AlertDialog dialog
-                    = new AlertDialog.Builder(this)
-                    .setTitle("Code Path Prework")
-                    .setMessage("Develop by Carlos Bedoy\n\nGithub:\nhttps://github.com/cbedoy\n\n :)")
-                    .create();
-            dialog.show();
-            return true;
+        if (android.os.Build.VERSION.SDK_INT >= 21)
+        {
+            Explode explode = new Explode();
+            explode.setDuration(2000);
+            getWindow().setEnterTransition(explode);
         }
-
-        return super.onOptionsItemSelected(item);
     }
+
 }

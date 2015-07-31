@@ -36,6 +36,7 @@ public class TodoViewCell extends AbstractAdapter<TODOPojo> {
             viewHolder.titleView = (TextView) view.findViewById(R.id.title_view_cell);
             viewHolder.dateView = (TextView) view.findViewById(R.id.date_view_cel);
             viewHolder.descriptionView = (TextView) view.findViewById(R.id.description_view_cell);
+            viewHolder.container = view.findViewById(R.id.date_view);
 
             view.setTag(viewHolder);
         }else {
@@ -61,6 +62,7 @@ public class TodoViewCell extends AbstractAdapter<TODOPojo> {
         viewHolder.titleView.startAnimation(animation);
         viewHolder.descriptionView.startAnimation(animation);
         viewHolder.dateView.startAnimation(animation);
+        viewHolder.dateView.startAnimation(animation);
 
 
         return view;
@@ -70,5 +72,6 @@ public class TodoViewCell extends AbstractAdapter<TODOPojo> {
         TextView titleView;
         TextView descriptionView;
         TextView dateView;
+        View container;
     }
 }

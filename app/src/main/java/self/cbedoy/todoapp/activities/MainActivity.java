@@ -1,10 +1,11 @@
 package self.cbedoy.todoapp.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.support.annotation.UiThread;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.transition.Explode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +14,6 @@ import android.widget.ListView;
 
 import com.melnykov.fab.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -38,12 +38,15 @@ public class MainActivity extends ActionBarActivity {
 
     private ListView mListView;
 
+    private CacheService<TODOPojo> mCacheService;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mCacheService = new CacheService<>();
 
         mListView = (ListView) findViewById(R.id.list_dodo);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -53,10 +56,10 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(MainActivity.this, AddTODOActivity.class);
+                Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
 
 
-                startActivityForResult(intent, AddTODOActivity.REQUEST_CODE);
+                startActivityForResult(intent, AddItemActivity.REQUEST_CODE);
             }
         });
 
@@ -93,20 +96,28 @@ public class MainActivity extends ActionBarActivity {
 
         readItems();
 
+
+        if (android.os.Build.VERSION.SDK_INT >= 21)
+        {
+            Explode explode = new Explode();
+            explode.setDuration(2000);
+            getWindow().setExitTransition(explode);
+        }
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == EditItemActivity.REQUEST_CODE && resultCode == RESULT_OK){
+        if (requestCode == EditItemActivity.REQUEST_CODE && resultCode == RESULT_OK) {
 
             Bundle extras = data.getExtras();
 
             String title = extras.getString("title", "");
             String description = extras.getString("description", "");
-            int index = extras.getInt("description", -1);
+            int index = extras.getInt("position", -1);
 
-            if(!(title.equals("") || description.equals("") || index == -1)) {
-                TODOPojo todoPojo =  mDataModel.get(index);
+            if (!(title.equals("") || description.equals("") || index == -1)) {
+                TODOPojo todoPojo = mDataModel.get(index);
 
                 todoPojo.setDate(Calendar.getInstance().getTime());
                 todoPojo.setTitle(title);
@@ -117,17 +128,16 @@ public class MainActivity extends ActionBarActivity {
                 writeItems();
 
 
-
             }
 
 
-        }else if(requestCode == AddTODOActivity.REQUEST_CODE && resultCode == RESULT_OK){
+        } else if (requestCode == AddItemActivity.REQUEST_CODE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
 
             String title = extras.getString("title", "");
             String description = extras.getString("description", "");
 
-            if(!(title.equals("") || description.equals(""))) {
+            if (!(title.equals("") || description.equals(""))) {
 
                 TODOPojo pojo = new TODOPojo();
                 pojo.setDate(Calendar.getInstance().getTime());
@@ -142,12 +152,12 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    private void readItems(){
+    private void readItems() {
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mDataModel = CacheService.getInstance().readCacheFromSHA("todos");
+                mDataModel = mCacheService.readCacheFromSHA("todos");
 
                 mViewCell = new TodoViewCell(mDataModel);
 
@@ -161,18 +171,17 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    private void writeItems(){
+    private void writeItems() {
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                CacheService.getInstance().writeCacheForSHA("todos", mDataModel);
+
+                mCacheService.writeCacheForSHA("todos", mDataModel);
+
                 mViewCell.notifyDataSetChanged();
             }
         });
-
-
-
     }
 
     @Override
@@ -187,8 +196,7 @@ public class MainActivity extends ActionBarActivity {
 
         int id = item.getItemId();
 
-        if (id == R.id.action_settings)
-        {
+        if (id == R.id.action_settings) {
 
             AlertDialog dialog
                     = new AlertDialog.Builder(this)

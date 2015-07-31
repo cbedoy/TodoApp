@@ -24,7 +24,7 @@
             android:name=".activities.EditItemActivity"
             android:label="@string/title_activity_edit_item" >
         </activity>
-        <activity android:name=".activities.AddTODOActivity"/>
+        <activity android:name=".activities.AddItemActivity"/>
     </application>
 
 </manifest>

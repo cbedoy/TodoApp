@@ -3,7 +3,10 @@ package self.cbedoy.todoapp.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.transition.Explode;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.melnykov.fab.FloatingActionButton;
@@ -17,14 +20,15 @@ import self.cbedoy.todoapp.R;
  * <p/>
  * Pademobile
  */
-public class AddTODOActivity extends Activity
+public class AddItemActivity extends ActionBarActivity
 {
     public static int REQUEST_CODE = 31312;
 
 
     private EditText mTitleView;
     private EditText mMessageView;
-    private FloatingActionButton mFloatingActionButton;
+
+    private Button mAcceptView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +36,20 @@ public class AddTODOActivity extends Activity
 
         setContentView(R.layout.activity_add_item);
 
+        if (android.os.Build.VERSION.SDK_INT >= 21)
+        {
+            Explode explode = new Explode();
+            explode.setDuration(2000);
+            getWindow().setEnterTransition(explode);
+        }
+
         mTitleView = (EditText) findViewById(R.id.addTitleView);
 
         mMessageView = (EditText) findViewById(R.id.addDescriptionView);
 
-        mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+        mAcceptView = (Button) findViewById(R.id.confirmView);
 
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+        mAcceptView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -55,5 +66,9 @@ public class AddTODOActivity extends Activity
                 finish();
             }
         });
+
+
+
+
     }
 }
