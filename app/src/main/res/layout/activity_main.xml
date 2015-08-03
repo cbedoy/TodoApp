@@ -1,34 +1,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ListView
+        android:id="@+id/list_dodo"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <Button
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Accept"
-        android:id="@+id/actionButton"
+        android:layout_gravity="bottom|right"
+        android:src="@drawable/ic_action_add"
+        android:elevation="4dp"
+        fab:fab_colorNormal="@color/primary"
+        fab:fab_colorPressed="@color/primary"
+        fab:fab_colorRipple="@color/primary_dark"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="14dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="14dp"
+        tools:ignore="UnusedAttribute" />
 
-    <EditText
-        android:hint="value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/inputView"
-        android:layout_alignBottom="@+id/actionButton"
-        android:layout_toLeftOf="@+id/actionButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/todoListView"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/inputView"
-        android:layout_alignStart="@+id/inputView"
-        android:layout_above="@+id/actionButton" />
 </RelativeLayout>

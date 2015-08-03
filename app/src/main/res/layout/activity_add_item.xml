@@ -8,15 +8,6 @@
     tools:context="self.cbedoy.todoapp.activities.EditItemActivity">
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="14dp"
-        android:gravity="right"
-        android:textColor="@color/accent"
-        android:id="@+id/dateEditView"
-        android:text="Some date" />
-
 
     <EditText
         android:layout_width="match_parent"
@@ -25,7 +16,7 @@
         android:textColor="@color/secondary_text"
         android:textColorHint="@color/hint"
         android:hint="Title"
-        android:id="@+id/titleEditView" />
+        android:id="@+id/addTitleView" />
 
     <EditText
         android:layout_width="match_parent"
@@ -36,7 +27,7 @@
         android:gravity="top"
         android:textColor="@color/secondary_text"
         android:hint="Description"
-        android:id="@+id/descriptionEditView" />
+        android:id="@+id/addDescriptionView" />
 
     <Button
         android:background="@color/accent"
@@ -45,5 +36,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Confirm"
-        android:id="@+id/confirmEditView" />
+        android:id="@+id/confirmView" />
 </LinearLayout>
